@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Next Best</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+  <style>
+    body {
+      background-color: var(--bs-body-bg);
+      color: var(--bs-body-color);
+    }
+    .combo-item strong {
+      color: var(--bs-primary);
+    }
+    .saved-list li {
+      padding: 0.3rem 0;
+    }
+    .theme-toggle {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <span class="navbar-brand mb-0 h1">Next Best</span>
+    <div class="d-flex align-items-center gap-3 text-white">
+      <span>Mood: <span id="mood-label" class="fw-bold">Relaxed</span></span>
+      <button class="btn btn-sm btn-outline-light theme-toggle" onclick="toggleTheme()">🌓</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Onboarding Quiz -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">🎯 Onboarding Quiz</h5>
+      <div class="mb-2">
+        <label for="fav-movie" class="form-label">Favorite Movie:</label>
+        <input type="text" class="form-control" id="fav-movie" placeholder="e.g., Inception" />
+      </div>
+      <div class="mb-2">
+        <label for="fav-music" class="form-label">Favorite Music Artist:</label>
+        <input type="text" class="form-control" id="fav-music" placeholder="e.g., Radiohead" />
+      </div>
+      <div class="mb-2">
+        <label for="fav-food" class="form-label">Favorite Cuisine:</label>
+        <input type="text" class="form-control" id="fav-food" placeholder="e.g., Thai" />
+      </div>
+      <div class="mb-2">
+        <label for="fav-art" class="form-label">Favorite Art Style:</label>
+        <input type="text" class="form-control" id="fav-art" placeholder="e.g., Impressionism" />
+      </div>
+      <button class="btn btn-primary mt-2" onclick="savePreferences()">💾 Save Preferences</button>
+    </div>
+  </div>
+
+  <!-- Mood Slider -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">🧠 Set Your Mood</h5>
+      <input type="range" class="form-range" min="0" max="4" value="2" id="moodSlider" />
+      <p>Current Mood: <span class="fw-bold" id="moodText">Relaxed</span></p>
+    </div>
+  </div>
+
+  <!-- Recommendations -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">✨ Your Next Best Lifestyle Combo</h5>
+      <div id="recommendations" class="combo-item my-3"></div>
+      <div class="d-grid gap-2">
+        <button class="btn btn-success" onclick="generateRecommendations()">🔄 Get New Combo</button>
+        <button class="btn btn-warning" onclick="saveCombo()">⭐ Save This Combo</button>
+        <button class="btn btn-outline-secondary" onclick="shareCombo()">🔗 Share Combo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saved Combos -->
+  <div class="card mb-5">
+    <div class="card-body">
+      <h5 class="card-title">📌 Saved Combos</h5>
+      <ul id="savedList" class="saved-list list-unstyled mb-0"></ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const moods = ['Adventurous', 'Focused', 'Relaxed', 'Romantic', 'Inspired'];
+  const moodSlider = document.getElementById('moodSlider');
+  const moodText = document.getElementById('moodText');
+  const moodLabel = document.getElementById('mood-label');
+  const recContainer = document.getElementById('recommendations');
+  const savedList = document.getElementById('savedList');
+
+  const moodBasedData = {
+    Adventurous: {
+      movie: ["Mad Max: Fury Road", "Into the Wild"],
+      music: ["Arctic Monkeys", "Jungle"],
+      food: ["Spicy Ramen", "Afghan Kebabs"],
+      art: ["Street Graffiti Walk", "3D Installations"]
+    },
+    Focused: {
+      movie: ["The Social Network", "Good Will Hunting"],
+      music: ["Lo-fi Focus", "Beethoven"],
+      food: ["Minimalist Bento", "Brain-Boost Smoothie"],
+      art: ["Minimalist Photography", "Black-and-White Gallery"]
+    },
+    Relaxed: {
+      movie: ["Her", "Chef"],
+      music: ["Beach House", "Acoustic Chill"],
+      food: ["Thai Green Curry", "Avocado Toast"],
+      art: ["Impressionism", "Pastel Abstracts"]
+    },
+    Romantic: {
+      movie: ["Pride & Prejudice", "Before Sunrise"],
+      music: ["Chet Baker", "Lana Del Rey"],
+      food: ["Fondue", "French Bistro"],
+      art: ["Rococo", "Candlelight Exhibit"]
+    },
+    Inspired: {
+      movie: ["Walter Mitty", "Pursuit of Happyness"],
+      music: ["Hans Zimmer", "Indie Spirit"],
+      food: ["Fusion Tapas", "Wellness Bowl"],
+      art: ["AI Art", "Conceptual Design Show"]
+    }
+  };
+
+  function savePreferences() {
+    const prefs = {
+      movie: document.getElementById("fav-movie").value,
+      music: document.getElementById("fav-music").value,
+      food: document.getElementById("fav-food").value,
+      art: document.getElementById("fav-art").value
+    };
+    localStorage.setItem("userPreferences", JSON.stringify(prefs));
+    alert("Preferences saved!");
+  }
+
+  function generateRecommendations(fromURL = false) {
+    const mood = moods[moodSlider.value];
+    const data = moodBasedData[mood];
+    const combo = {
+      movie: randomItem(data.movie),
+      music: randomItem(data.music),
+      food: randomItem(data.food),
+      art: randomItem(data.art),
+      mood
+    };
+    renderCombo(combo);
+    if (!fromURL) {
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+
+  function renderCombo(combo) {
+    recContainer.innerHTML = `
+      <p>🎬 <strong>${combo.movie}</strong></p>
+      <p>🎵 <strong>${combo.music}</strong></p>
+      <p>🍽️ <strong>${combo.food}</strong></p>
+      <p>🎨 <strong>${combo.art}</strong></p>
+      <p>🧠 <strong>${combo.mood}</strong></p>
+    `;
+    recContainer.dataset.combo = JSON.stringify(combo);
+  }
+
+  function saveCombo() {
+    const combo = recContainer.dataset.combo;
+    if (!combo) return;
+    const item = JSON.parse(combo);
+    const li = document.createElement('li');
+    li.textContent = `${item.mood} → ${item.movie} / ${item.music} / ${item.food} / ${item.art}`;
+    savedList.appendChild(li);
+  }
+
+  function shareCombo() {
+    const combo = JSON.parse(recContainer.dataset.combo);
+    const params = new URLSearchParams(combo).toString();
+    const shareURL = `${window.location.origin}${window.location.pathname}?${params}`;
+    navigator.clipboard.writeText(shareURL);
+    alert("Combo link copied to clipboard!");
+  }
+
+  function loadComboFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.has("movie")) return;
+    const combo = {
+      movie: urlParams.get("movie"),
+      music: urlParams.get("music"),
+      food: urlParams.get("food"),
+      art: urlParams.get("art"),
+      mood: urlParams.get("mood")
+    };
+    renderCombo(combo);
+  }
+
+  function randomItem(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute("data-bs-theme");
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-bs-theme", newTheme);
+  }
+
+  moodSlider.addEventListener('input', () => {
+    const mood = moods[moodSlider.value];
+    moodText.textContent = mood;
+    moodLabel.textContent = mood;
+  });
+
+  window.onload = () => {
+    loadComboFromURL();
+    if (!recContainer.innerHTML.trim()) generateRecommendations();
+  };
+</script>
+
+</body>
+</html>
