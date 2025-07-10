@@ -1,228 +1,724 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Next Best</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
-  <style>
-    body {
-      background-color: var(--bs-body-bg);
-      color: var(--bs-body-color);
-    }
-    .combo-item strong {
-      color: var(--bs-primary);
-    }
-    .saved-list li {
-      padding: 0.3rem 0;
-    }
-    .theme-toggle {
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Best - Discover</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0V4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Custom CSS for a sleek, modern look and Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e; /* Darker background for Bootstrap dark theme */
+            color: #e0e0e0; /* Light text for contrast - general body text */
+            line-height: 1.6;
+        }
+        /* Ensure all headings and paragraphs default to a light color for readability */
+        h1, h2, h3, h4, h5, h6, p {
+            color: #e0e0e0; /* Default light color for all text elements */
+        }
+        .navbar {
+            background-color: #0f0f1c !important; /* Even darker for navbar */
+            border-bottom: 1px solid #2a2a4a;
+        }
+        .container {
+            max-width: 960px; /* Max width for content */
+        }
+        .card {
+            background-color: #2a2a4a; /* Slightly lighter dark for cards */
+            border: 1px solid #4a4a6a;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-radius: 0.75rem; /* Rounded corners for cards */
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .btn-primary {
+            background-color: #007bff; /* Bootstrap primary blue */
+            border-color: #007bff;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px; /* Fully rounded */
+            font-weight: 600;
+            transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .form-control {
+            background-color: #1a1a2e;
+            border: 1px solid #4a4a6a;
+            color: #e0e0e0;
+            transition: border-color 0.3s ease-in-out;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+            background-color: #1a1a2e; /* Keep background consistent on focus */
+            color: #e0e0e0;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .modal-content {
+            background-color: #2a2a4a;
+            color: #e0e0e0;
+            border: 1px solid #4a4a6a;
+            border-radius: 0.75rem;
+        }
+        .modal-header {
+            border-bottom: 1px solid #4a4a6a;
+        }
+        .modal-footer {
+            border-top: 1px solid #4a4a6a;
+        }
+        .form-check-input:checked {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        footer {
+            background-color: #0f0f1c;
+            color: #b0b0b0;
+            border-top: 1px solid #2a2a4a;
+        }
+        /* Custom hover effect for footer links */
+        .hover-text-info:hover {
+            color: #17a2b8 !important; /* Bootstrap info color */
+        }
+        /* Ensure Bootstrap text color classes override default for specific elements */
+        .text-info {
+            color: #17a2b8 !important; /* Ensure Bootstrap info color is applied */
+        }
+        .text-white {
+            color: #ffffff !important; /* Ensure Bootstrap white color is applied */
+        }
+        .text-muted {
+            color: #b0b0b0 !important; /* Ensure Bootstrap muted color is applied and readable */
+        }
+        .text-secondary {
+            color: #6c757d !important; /* Ensure Bootstrap secondary color is applied and readable */
+        }
+        .text-danger {
+            color: #dc3545 !important; /* Ensure Bootstrap danger color is applied and readable */
+        }
+        .bg-darker {
+            background-color: #111122 !important; /* Custom darker background */
+        }
+
+        /* Mood Slider specific styles */
+        .mood-slider-container {
+            position: relative;
+            width: 100%;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem 0.5rem; /* Add some padding around the slider */
+            background-color: #1f1f3a; /* Slightly lighter background for slider area */
+            border-radius: 0.5rem;
+            border: 1px solid #3a3a5a;
+        }
+        #moodSlider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 10px; /* Thicker slider track */
+            background: linear-gradient(to right, #dc3545, #ffc107, #28a745, #007bff, #6f42c1); /* Gradient for mood */
+            outline: none;
+            opacity: 0.9;
+            transition: opacity .2s;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+        }
+        #moodSlider:hover {
+            opacity: 1;
+        }
+        #moodSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px; /* Larger thumb */
+            height: 24px; /* Larger thumb */
+            border-radius: 50%;
+            background: #ffffff; /* White thumb for contrast */
+            cursor: grab;
+            border: 3px solid #007bff; /* Blue border */
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.7); /* Stronger shadow */
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        #moodSlider::-webkit-slider-thumb:active {
+            cursor: grabbing;
+            box-shadow: 0 0 12px rgba(0, 123, 255, 1);
+        }
+        #moodSlider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: grab;
+            border: 3px solid #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.7);
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        #moodSlider::-moz-range-thumb:active {
+            cursor: grabbing;
+            box-shadow: 0 0 12px rgba(0, 123, 255, 1);
+        }
+        .mood-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.75rem; /* More space */
+            font-size: 0.9rem;
+            color: #b0b0b0;
+        }
+        .mood-labels span {
+            text-align: center;
+            flex: 1;
+            padding: 0 5px; /* Add padding for better spacing */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .mood-labels span i {
+            margin-bottom: 0.25rem;
+            font-size: 1.2rem; /* Larger icons for labels */
+        }
+
+        /* Input field styling */
+        .form-control {
+            background-color: #1a1a2e;
+            border: 1px solid #4a4a6a;
+            color: #e0e0e0;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .form-control::placeholder {
+            color: #888;
+            opacity: 1; /* Ensure placeholder is visible */
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25), inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* Tab styling */
+        .nav-tabs {
+            border-bottom: 2px solid #4a4a6a;
+            margin-bottom: 1.5rem;
+        }
+        .nav-tabs .nav-link {
+            color: #b0b0b0;
+            border: 1px solid transparent;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            margin-bottom: -2px; /* Overlap border */
+            transition: all 0.3s ease;
+            padding: 0.75rem 1.25rem;
+            background-color: #1a1a2e; /* Default tab background */
+        }
+        .nav-tabs .nav-link:hover {
+            color: #ffffff;
+            border-color: #4a4a6a #4a4a6a #0f0f1c; /* Border on hover */
+            background-color: #2a2a4a; /* Hover background */
+        }
+        .nav-tabs .nav-link.active {
+            color: #17a2b8 !important; /* Info color for active tab text */
+            background-color: #2a2a4a; /* Active tab background */
+            border-color: #17a2b8 #17a2b8 #2a2a4a; /* Active tab border */
+            font-weight: bold;
+        }
+        .tab-content {
+            background-color: #2a2a4a;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
+    <!-- Header/Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid container">
+                <a class="navbar-brand text-info fw-bold fs-4" href="landing_page.html">Next Best</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="index.html">Discover</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-<!-- Header -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-  <div class="container-fluid d-flex justify-content-between align-items-center">
-    <span class="navbar-brand mb-0 h1">Next Best</span>
-    <div class="d-flex align-items-center gap-3 text-white">
-      <span>Mood: <span id="mood-label" class="fw-bold">Relaxed</span></span>
-      <button class="btn btn-sm btn-outline-light theme-toggle" onclick="toggleTheme()">🌓</button>
+    <!-- Main Content Section -->
+    <main class="py-5 px-4">
+        <div class="container">
+            <h1 class="display-3 fw-bold text-center mb-5 text-info">
+                Discover Your Next Best
+            </h1>
+
+            <!-- Onboarding Quiz Section -->
+            <section id="onboarding-quiz" class="mb-5 bg-dark p-4 rounded-3 shadow">
+                <h2 class="h3 fw-bold mb-4 text-info d-flex align-items-center">
+                    <i class="fas fa-question-circle me-3"></i> Tell Us About Yourself
+                </h2>
+                <p class="text-muted mb-4">Answer a few quick questions to help us personalize your recommendations!</p>
+
+                <div class="mb-4">
+                    <label for="moodSlider" class="form-label text-light fs-5 fw-semibold mb-3">How are you feeling today?</label>
+                    <div class="mood-slider-container">
+                        <input type="range" class="form-range" min="0" max="4" step="1" value="2" id="moodSlider" list="moodDatalist">
+                        <datalist id="moodDatalist">
+                            <option value="0" label="Sad"></option>
+                            <option value="1" label="Relaxed"></option>
+                            <option value="2" label="Happy"></option>
+                            <option value="3" label="Energetic"></option>
+                            <option value="4" label="Very Excited"></option>
+                        </datalist>
+                        <div class="mood-labels">
+                            <span><i class="far fa-frown me-1"></i> Sad</span>
+                            <span><i class="far fa-grin-alt me-1"></i> Relaxed</span>
+                            <span><i class="far fa-smile me-1"></i> Happy</span>
+                            <span><i class="fas fa-bolt me-1"></i> Energetic</span>
+                            <span><i class="fas fa-fire me-1"></i> Very Excited</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Input Fields for Preferences -->
+                <div class="mb-4">
+                    <label for="favoriteMovie" class="form-label text-light fs-5 fw-semibold mb-3">Favorite Movie:</label>
+                    <input type="text" class="form-control" id="favoriteMovie" placeholder="e.g., Inception, The Matrix, Pulp Fiction">
+                    <small class="form-text text-muted">Enter one or more movies, separated by commas.</small>
+                </div>
+
+                <div class="mb-4">
+                    <label for="favoriteMusicArtist" class="form-label text-light fs-5 fw-semibold mb-3">Favorite Music Artist:</label>
+                    <input type="text" class="form-control" id="favoriteMusicArtist" placeholder="e.g., Queen, Taylor Swift, Daft Punk">
+                    <small class="form-text text-muted">Enter one or more artists, separated by commas.</small>
+                </div>
+
+                <div class="mb-4">
+                    <label for="favoriteCuisine" class="form-label text-light fs-5 fw-semibold mb-3">Favorite Cuisine:</label>
+                    <input type="text" class="form-control" id="favoriteCuisine" placeholder="e.g., Italian, Mexican, Japanese">
+                    <small class="form-text text-muted">Enter one or more cuisines, separated by commas.</small>
+                </div>
+
+                <div class="mb-4">
+                    <label for="favoriteArtStyle" class="form-label text-light fs-5 fw-semibold mb-3">Favorite Art Style:</label>
+                    <input type="text" class="form-control" id="favoriteArtStyle" placeholder="e.g., Impressionism, Surrealism, Abstract">
+                    <small class="form-text text-muted">Enter one or more art styles, separated by commas.</small>
+                </div>
+
+                <button id="submitQuizBtn" class="btn btn-primary d-flex align-items-center justify-content-center w-100 w-md-auto">
+                    <i class="fas fa-check-circle me-2"></i> Get Personalized Recommendations
+                </button>
+            </section>
+
+            <!-- Tabbed Navigation for Categories -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="movies-tab" data-bs-toggle="tab" data-bs-target="#movies-tab-pane" type="button" role="tab" aria-controls="movies-tab-pane" aria-selected="true">
+                        <i class="fas fa-film me-2"></i> Movies
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="music-tab" data-bs-toggle="tab" data-bs-target="#music-tab-pane" type="button" role="tab" aria-controls="music-tab-pane" aria-selected="false">
+                        <i class="fas fa-music me-2"></i> Music
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="books-tab" data-bs-toggle="tab" data-bs-target="#books-tab-pane" type="button" role="tab" aria-controls="books-tab-pane" aria-selected="false">
+                        <i class="fas fa-book-open me-2"></i> Books
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shows-tab" data-bs-toggle="tab" data-bs-target="#shows-tab-pane" type="button" role="tab" aria-controls="shows-tab-pane" aria-selected="false">
+                        <i class="fas fa-tv me-2"></i> TV Shows
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="games-tab" data-bs-toggle="tab" data-bs-target="#games-tab-pane" type="button" role="tab" aria-controls="games-tab-pane" aria-selected="false">
+                        <i class="fas fa-gamepad me-2"></i> Games
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="myTabContent">
+                <!-- Movies Tab Pane -->
+                <div class="tab-pane fade show active" id="movies-tab-pane" role="tabpanel" aria-labelledby="movies-tab" tabindex="0">
+                    <h2 class="h3 fw-bold mb-4 text-info d-flex align-items-center">
+                        <i class="fas fa-film me-3"></i> Movies
+                    </h2>
+                    <div class="bg-dark p-4 rounded-3 shadow mb-4">
+                        <p class="text-muted mb-3">Enter a movie, artist, or genre to get personalized movie recommendations.</p>
+                        <div class="d-flex flex-column flex-md-row align-items-center gap-3">
+                            <input type="text" id="movieInput" placeholder="e.g., 'Inception', 'Sci-Fi', 'Christopher Nolan'" class="form-control flex-grow-1">
+                            <button id="getMovieRecommendationsBtn" class="btn btn-primary d-flex align-items-center justify-content-center w-100 w-md-auto">
+                                <i class="fas fa-search me-2"></i> Get Movie Picks
+                            </button>
+                        </div>
+                        <div id="movieErrorMessage" class="text-danger mt-3 text-center d-none"></div>
+                    </div>
+
+                    <!-- Gemini Personalized Insight Container -->
+                    <div id="geminiPersonalizedMessageContainer" class="bg-dark p-4 rounded-3 shadow mb-4 d-none">
+                        <h4 class="text-info mb-3 d-flex align-items-center"><i class="fas fa-star-sparkle me-2"></i> Your Personalized Insight from Gemini:</h4>
+                        <div id="geminiMessageLoadingIndicator" class="d-flex justify-content-center align-items-center py-3 d-none">
+                            <div class="loading-spinner me-3"></div>
+                            <p class="text-muted mb-0">Gemini is crafting your insight...</p>
+                        </div>
+                        <p id="geminiPersonalizedMessageText" class="text-light"></p>
+                    </div>
+
+                    <!-- Loading Indicator for Movies -->
+                    <div id="movieLoadingIndicator" class="d-flex justify-content-center align-items-center py-4 d-none">
+                        <div class="loading-spinner me-3"></div>
+                        <p class="text-muted mb-0">Finding your next best movie...</p>
+                    </div>
+
+                    <!-- Movie Recommendations Display Area -->
+                    <div id="movieRecommendationsContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        <!-- Movie recommendation cards will be injected here by JavaScript -->
+                    </div>
+
+                    <!-- No Movie Results Message -->
+                    <div id="noMovieResultsMessage" class="text-center text-muted py-5 d-none">
+                        <i class="fas fa-film display-1 mb-3 text-secondary"></i>
+                        <p class="fs-5">No movie recommendations found. Try a different query!</p>
+                    </div>
+                </div>
+
+                <!-- Music Tab Pane -->
+                <div class="tab-pane fade" id="music-tab-pane" role="tabpanel" aria-labelledby="music-tab" tabindex="0">
+                    <h2 class="h3 fw-bold mb-4 text-info d-flex align-items-center">
+                        <i class="fas fa-music me-3"></i> Music
+                    </h2>
+                    <div class="bg-dark p-4 rounded-3 shadow text-center">
+                        <p class="text-muted">Discover your next favorite artists, albums, or genres.</p>
+                        <button class="btn btn-primary mt-3 opacity-50 cursor-not-allowed">
+                            <i class="fas fa-headphones me-2"></i> Coming Soon
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Books Tab Pane -->
+                <div class="tab-pane fade" id="books-tab-pane" role="tabpanel" aria-labelledby="books-tab" tabindex="0">
+                    <h2 class="h3 fw-bold mb-4 text-info d-flex align-items-center">
+                        <i class="fas fa-book-open me-3"></i> Books
+                    </h2>
+                    <div class="bg-dark p-4 rounded-3 shadow text-center">
+                        <p class="text-muted">Find your next captivating read, from bestsellers to hidden gems.</p>
+                        <button class="btn btn-primary mt-3 opacity-50 cursor-not-allowed">
+                            <i class="fas fa-book me-2"></i> Coming Soon
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Shows Tab Pane -->
+                <div class="tab-pane fade" id="shows-tab-pane" role="tabpanel" aria-labelledby="shows-tab" tabindex="0">
+                    <h2 class="h3 fw-bold mb-4 text-info d-flex align-items-center">
+                        <i class="fas fa-tv me-3"></i> TV Shows
+                    </h2>
+                    <div class="bg-dark p-4 rounded-3 shadow text-center">
+                        <p class="text-muted">Binge-watch your next favorite series or discover new ones.</p>
+                        <button class="btn btn-primary mt-3 opacity-50 cursor-not-allowed">
+                            <i class="fas fa-play-circle me-2"></i> Coming Soon
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Games Tab Pane -->
+                <div class="tab-pane fade" id="games-tab-pane" role="tabpanel" aria-labelledby="games-tab" tabindex="0">
+                    <h2 class="h3 fw-bold mb-4 text-info d-flex align-items-center">
+                        <i class="fas fa-gamepad me-3"></i> Games
+                    </h2>
+                    <div class="bg-dark p-4 rounded-3 shadow text-center">
+                        <p class="text-muted">Level up your gaming experience with new titles and genres.</p>
+                        <button class="btn btn-primary mt-3 opacity-50 cursor-not-allowed">
+                            <i class="fas fa-dice me-2"></i> Coming Soon
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="errorModalLabel"><i class="fas fa-exclamation-triangle me-2"></i> Error</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalErrorMessage" class="text-muted"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</nav>
 
-<div class="container">
+    <!-- Footer -->
+    <footer class="py-4 px-4 text-center mt-5">
+        <div class="container">
+            <p class="mb-2">&copy; 2024 Next Best. All rights reserved.</p>
+            <div class="d-flex justify-content-center space-x-3">
+                <a href="#" class="text-muted mx-2 hover-text-info"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" class="text-muted mx-2 hover-text-info"><i class="fab fa-facebook-f fa-lg"></i></a>
+                <a href="#" class="text-muted mx-2 hover-text-info"><i class="fab fa-instagram fa-lg"></i></a>
+            </div>
+        </div>
+    </footer>
 
-  <!-- Onboarding Quiz -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">🎯 Onboarding Quiz</h5>
-      <div class="mb-2">
-        <label for="fav-movie" class="form-label">Favorite Movie:</label>
-        <input type="text" class="form-control" id="fav-movie" placeholder="e.g., Inception" />
-      </div>
-      <div class="mb-2">
-        <label for="fav-music" class="form-label">Favorite Music Artist:</label>
-        <input type="text" class="form-control" id="fav-music" placeholder="e.g., Radiohead" />
-      </div>
-      <div class="mb-2">
-        <label for="fav-food" class="form-label">Favorite Cuisine:</label>
-        <input type="text" class="form-control" id="fav-food" placeholder="e.g., Thai" />
-      </div>
-      <div class="mb-2">
-        <label for="fav-art" class="form-label">Favorite Art Style:</label>
-        <input type="text" class="form-control" id="fav-art" placeholder="e.g., Impressionism" />
-      </div>
-      <button class="btn btn-primary mt-2" onclick="savePreferences()">💾 Save Preferences</button>
-    </div>
-  </div>
+    <!-- Bootstrap JS CDN (Bundle with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // JavaScript for Qloo API integration and dynamic content
+        document.addEventListener('DOMContentLoaded', () => {
+            const movieInput = document.getElementById('movieInput');
+            const getMovieRecommendationsBtn = document.getElementById('getMovieRecommendationsBtn');
+            const movieRecommendationsContainer = document.getElementById('movieRecommendationsContainer');
+            const movieLoadingIndicator = document.getElementById('movieLoadingIndicator');
+            const movieErrorMessage = document.getElementById('movieErrorMessage');
+            const noMovieResultsMessage = document.getElementById('noMovieResultsMessage');
 
-  <!-- Mood Slider -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">🧠 Set Your Mood</h5>
-      <input type="range" class="form-range" min="0" max="4" value="2" id="moodSlider" />
-      <p>Current Mood: <span class="fw-bold" id="moodText">Relaxed</span></p>
-    </div>
-  </div>
+            const submitQuizBtn = document.getElementById('submitQuizBtn');
+            const moviesTabButton = document.getElementById('movies-tab'); // Get the movies tab button
 
-  <!-- Recommendations -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">✨ Your Next Best Lifestyle Combo</h5>
-      <div id="recommendations" class="combo-item my-3"></div>
-      <div class="d-grid gap-2">
-        <button class="btn btn-success" onclick="generateRecommendations()">🔄 Get New Combo</button>
-        <button class="btn btn-warning" onclick="saveCombo()">⭐ Save This Combo</button>
-        <button class="btn btn-outline-secondary" onclick="shareCombo()">🔗 Share Combo</button>
-      </div>
-    </div>
-  </div>
+            const errorModalElement = document.getElementById('errorModal');
+            const errorModal = new bootstrap.Modal(errorModalElement); // Initialize Bootstrap Modal
+            const modalErrorMessage = document.getElementById('modalErrorMessage');
 
-  <!-- Saved Combos -->
-  <div class="card mb-5">
-    <div class="card-body">
-      <h5 class="card-title">📌 Saved Combos</h5>
-      <ul id="savedList" class="saved-list list-unstyled mb-0"></ul>
-    </div>
-  </div>
+            // Gemini Personalized Insight elements
+            const geminiPersonalizedMessageContainer = document.getElementById('geminiPersonalizedMessageContainer');
+            const geminiPersonalizedMessageText = document.getElementById('geminiPersonalizedMessageText');
+            const geminiMessageLoadingIndicator = document.getElementById('geminiMessageLoadingIndicator');
 
-</div>
+            // Mood Slider element
+            const moodSlider = document.getElementById('moodSlider');
 
-<script>
-  const moods = ['Adventurous', 'Focused', 'Relaxed', 'Romantic', 'Inspired'];
-  const moodSlider = document.getElementById('moodSlider');
-  const moodText = document.getElementById('moodText');
-  const moodLabel = document.getElementById('mood-label');
-  const recContainer = document.getElementById('recommendations');
-  const savedList = document.getElementById('savedList');
+            // New preference input fields
+            const favoriteMovieInput = document.getElementById('favoriteMovie');
+            const favoriteMusicArtistInput = document.getElementById('favoriteMusicArtist');
+            const favoriteCuisineInput = document.getElementById('favoriteCuisine');
+            const favoriteArtStyleInput = document.getElementById('favoriteArtStyle');
 
-  const moodBasedData = {
-    Adventurous: {
-      movie: ["Mad Max: Fury Road", "Into the Wild"],
-      music: ["Arctic Monkeys", "Jungle"],
-      food: ["Spicy Ramen", "Afghan Kebabs"],
-      art: ["Street Graffiti Walk", "3D Installations"]
-    },
-    Focused: {
-      movie: ["The Social Network", "Good Will Hunting"],
-      music: ["Lo-fi Focus", "Beethoven"],
-      food: ["Minimalist Bento", "Brain-Boost Smoothie"],
-      art: ["Minimalist Photography", "Black-and-White Gallery"]
-    },
-    Relaxed: {
-      movie: ["Her", "Chef"],
-      music: ["Beach House", "Acoustic Chill"],
-      food: ["Thai Green Curry", "Avocado Toast"],
-      art: ["Impressionism", "Pastel Abstracts"]
-    },
-    Romantic: {
-      movie: ["Pride & Prejudice", "Before Sunrise"],
-      music: ["Chet Baker", "Lana Del Rey"],
-      food: ["Fondue", "French Bistro"],
-      art: ["Rococo", "Candlelight Exhibit"]
-    },
-    Inspired: {
-      movie: ["Walter Mitty", "Pursuit of Happyness"],
-      music: ["Hans Zimmer", "Indie Spirit"],
-      food: ["Fusion Tapas", "Wellness Bowl"],
-      art: ["AI Art", "Conceptual Design Show"]
-    }
-  };
+            // Qloo API details
+            const QLOO_API_KEY = 'v1Jkve0UKfpNXgDRvXDx8-8Fzoe0exG6aCa779gNUTI'; // Provided API Key
 
-  function savePreferences() {
-    const prefs = {
-      movie: document.getElementById("fav-movie").value,
-      music: document.getElementById("fav-music").value,
-      food: document.getElementById("fav-food").value,
-      art: document.getElementById("fav-art").value
-    };
-    localStorage.setItem("userPreferences", JSON.stringify(prefs));
-    alert("Preferences saved!");
-  }
+            // Function to show custom modal
+            function showModal(message) {
+                modalErrorMessage.textContent = message;
+                errorModal.show(); // Show Bootstrap modal
+            }
 
-  function generateRecommendations(fromURL = false) {
-    const mood = moods[moodSlider.value];
-    const data = moodBasedData[mood];
-    const combo = {
-      movie: randomItem(data.movie),
-      music: randomItem(data.music),
-      food: randomItem(data.food),
-      art: randomItem(data.art),
-      mood
-    };
-    renderCombo(combo);
-    if (!fromURL) {
-      history.replaceState(null, '', window.location.pathname);
-    }
-  }
+            // Event listener for the movie search button
+            getMovieRecommendationsBtn.addEventListener('click', () => fetchMovieRecommendations(movieInput.value.trim()));
+            movieInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    fetchMovieRecommendations(movieInput.value.trim());
+                }
+            });
 
-  function renderCombo(combo) {
-    recContainer.innerHTML = `
-      <p>🎬 <strong>${combo.movie}</strong></p>
-      <p>🎵 <strong>${combo.music}</strong></p>
-      <p>🍽️ <strong>${combo.food}</strong></p>
-      <p>🎨 <strong>${combo.art}</strong></p>
-      <p>🧠 <strong>${combo.mood}</strong></p>
-    `;
-    recContainer.dataset.combo = JSON.stringify(combo);
-  }
+            // Event listener for the quiz submission button
+            submitQuizBtn.addEventListener('click', () => {
+                const moodValue = parseInt(moodSlider.value);
+                let selectedMood = '';
+                switch (moodValue) {
+                    case 0: selectedMood = 'sad'; break;
+                    case 1: selectedMood = 'relaxed'; break;
+                    case 2: selectedMood = 'happy'; break;
+                    case 3: selectedMood = 'energetic'; break;
+                    case 4: selectedMood = 'very excited'; break;
+                }
 
-  function saveCombo() {
-    const combo = recContainer.dataset.combo;
-    if (!combo) return;
-    const item = JSON.parse(combo);
-    const li = document.createElement('li');
-    li.textContent = `${item.mood} → ${item.movie} / ${item.music} / ${item.food} / ${item.art}`;
-    savedList.appendChild(li);
-  }
+                const favoriteMovie = favoriteMovieInput.value.trim();
+                const favoriteMusicArtist = favoriteMusicArtistInput.value.trim();
+                const favoriteCuisine = favoriteCuisineInput.value.trim();
+                const favoriteArtStyle = favoriteArtStyleInput.value.trim();
 
-  function shareCombo() {
-    const combo = JSON.parse(recContainer.dataset.combo);
-    const params = new URLSearchParams(combo).toString();
-    const shareURL = `${window.location.origin}${window.location.pathname}?${params}`;
-    navigator.clipboard.writeText(shareURL);
-    alert("Combo link copied to clipboard!");
-  }
+                let quizQueryParts = [];
+                if (selectedMood) quizQueryParts.push(selectedMood);
+                if (favoriteMovie) quizQueryParts.push(favoriteMovie);
+                if (favoriteMusicArtist) quizQueryParts.push(favoriteMusicArtist);
+                if (favoriteCuisine) quizQueryParts.push(favoriteCuisine);
+                if (favoriteArtStyle) quizQueryParts.push(favoriteArtStyle);
 
-  function loadComboFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (!urlParams.has("movie")) return;
-    const combo = {
-      movie: urlParams.get("movie"),
-      music: urlParams.get("music"),
-      food: urlParams.get("food"),
-      art: urlParams.get("art"),
-      mood: urlParams.get("mood")
-    };
-    renderCombo(combo);
-  }
+                const quizQuery = quizQueryParts.join(', ');
 
-  function randomItem(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
+                if (quizQuery.trim()) {
+                    movieInput.value = quizQuery.trim(); // Pre-fill the movie input
 
-  function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute("data-bs-theme");
-    const newTheme = currentTheme === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-bs-theme", newTheme);
-  }
+                    // Activate the movies tab and then fetch recommendations
+                    const moviesTab = new bootstrap.Tab(moviesTabButton);
+                    moviesTab.show();
 
-  moodSlider.addEventListener('input', () => {
-    const mood = moods[moodSlider.value];
-    moodText.textContent = mood;
-    moodLabel.textContent = mood;
-  });
+                    // Scroll to the top of the tab content area, or the movies section
+                    document.getElementById('myTabContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  window.onload = () => {
-    loadComboFromURL();
-    if (!recContainer.innerHTML.trim()) generateRecommendations();
-  };
-</script>
+                    fetchMovieRecommendations(quizQuery.trim()); // Trigger search with quiz results
+                } else {
+                    showModal('Please select a mood or enter at least one preference to get personalized recommendations.');
+                }
+            });
 
+
+            async function fetchMovieRecommendations(query) {
+                if (!query) {
+                    showModal('Please enter a movie, artist, or genre to get movie recommendations.');
+                    return;
+                }
+
+                // Clear previous results and messages
+                movieRecommendationsContainer.innerHTML = '';
+                movieErrorMessage.classList.add('d-none');
+                noMovieResultsMessage.classList.add('d-none');
+                geminiPersonalizedMessageContainer.classList.add('d-none'); // Hide previous Gemini message
+                geminiPersonalizedMessageText.textContent = ''; // Clear text
+                movieLoadingIndicator.classList.remove('d-none'); // Show movie loading spinner
+
+                try {
+                    // Fetch movie recommendations from Qloo (TasteDive) API
+                    const apiUrl = new URL('https://tastedive.com/api/1.0/json/recommend');
+                    const params = {
+                        q: query,
+                        type: 'movies', // Requesting movie recommendations
+                        info: 1, // To get additional information like description
+                        k: QLOO_API_KEY // API Key
+                    };
+
+                    for (const key in params) {
+                        apiUrl.searchParams.append(key, params[key]);
+                    }
+
+                    const response = await fetch(apiUrl.toString());
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`API Error: ${response.status} - ${response.statusText || errorText}`);
+                    }
+
+                    const data = await response.json();
+                    let recommendedMovieNames = [];
+
+                    // Check if there are recommendations
+                    if (data && data.Similar && data.Similar.Results && data.Similar.Results.length > 0) {
+                        data.Similar.Results.forEach(movie => {
+                            const movieCard = document.createElement('div');
+                            movieCard.className = 'col'; // Bootstrap column for grid
+                            // Use a placeholder image if yUrl is not available or invalid
+                            const imageUrl = movie.yUrl ? `https://img.youtube.com/vi/${movie.yUrl.split('v=')[1]}/hqdefault.jpg` : `https://placehold.co/320x180/1a1a2e/e0e0e0?text=No+Image`;
+
+                            movieCard.innerHTML = `
+                                <div class="card h-100 p-3 d-flex flex-column align-items-center text-center">
+                                    <img src="${imageUrl}" alt="${movie.Name}" class="img-fluid rounded mb-3" onerror="this.onerror=null;this.src='https://placehold.co/320x180/1a1a2e/e0e0e0?text=No+Image';">
+                                    <h3 class="h5 fw-semibold mb-2 text-white">${movie.Name}</h3>
+                                    <p class="text-muted small mb-3">${movie.Type} | ${movie.Genre}</p>
+                                    <p class="text-light flex-grow-1">${movie.Teaser || 'No description available.'}</p>
+                                    ${movie.wUrl ? `<a href="${movie.wUrl}" target="_blank" class="btn btn-sm btn-outline-info mt-auto"><i class="fas fa-info-circle me-1"></i> More Info</a>` : ''}
+                                </div>
+                            `;
+                            movieRecommendationsContainer.appendChild(movieCard);
+                            recommendedMovieNames.push(movie.Name); // Collect movie names for Gemini prompt
+                        });
+                        // After displaying movies, fetch personalized insight from Gemini
+                        fetchGeminiPersonalizedInsight(query, recommendedMovieNames.slice(0, 3)); // Pass top 3 movie names
+                    } else {
+                        noMovieResultsMessage.classList.remove('d-none'); // Show no results message
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching movie recommendations:', error);
+                    showModal('Failed to fetch movie recommendations. Please try again later. ' + error.message);
+                    movieErrorMessage.textContent = 'Failed to fetch recommendations. Please try again.';
+                    movieErrorMessage.classList.remove('d-none');
+                } finally {
+                    movieLoadingIndicator.classList.add('d-none'); // Hide movie loading spinner
+                }
+            }
+
+            async function fetchGeminiPersonalizedInsight(userQuery, topMovieNames) {
+                geminiPersonalizedMessageContainer.classList.remove('d-none'); // Show container
+                geminiMessageLoadingIndicator.classList.remove('d-none'); // Show Gemini loading spinner
+                geminiPersonalizedMessageText.textContent = ''; // Clear previous text
+
+                let prompt = `The user searched for recommendations based on "${userQuery}". We found movies like ${topMovieNames.join(', ')}. Provide a short (2-3 sentences) personalized insight or a creative blurb about their potential 'next best' experience based on these findings. Make it encouraging and concise.`;
+
+                if (topMovieNames.length === 0) {
+                    prompt = `The user searched for "${userQuery}" but we couldn't find specific movie recommendations. Provide a short (2-3 sentences) encouraging message or a creative thought about discovering new experiences, even when initial searches don't yield direct results.`;
+                }
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // Canvas will provide this at runtime if empty
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`Gemini API Error: ${response.status} - ${errorData.error.message || 'Unknown error'}`);
+                    }
+
+                    const result = await response.json();
+                    let generatedText = "No personalized insight generated.";
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        generatedText = result.candidates[0].content.parts[0].text;
+                    } else {
+                        generatedText = "Gemini could not craft a personalized insight at this time.";
+                    }
+
+                    geminiPersonalizedMessageText.textContent = generatedText;
+
+                } catch (error) {
+                    console.error('Error fetching Gemini personalized insight:', error);
+                    geminiPersonalizedMessageText.textContent = 'Could not generate a personalized insight. Please try again later.';
+                    // Optionally, show a modal error for Gemini specifically if needed
+                    // showModal('Failed to get personalized insight from Gemini. ' + error.message);
+                } finally {
+                    geminiMessageLoadingIndicator.classList.add('d-none'); // Hide Gemini loading spinner
+                }
+            }
+        });
+    </script>
 </body>
 </html>
