@@ -1,92 +1,214 @@
-<!-- landing.html -->
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Next Best – Curated Lifestyle Assistant</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
-  <style>
-    body {
-      background-color: #fff;
-      font-family: Helvetica, Arial, sans-serif;
-    }
-    .hero {
-      padding: 6rem 1rem;
-      background: linear-gradient(to right, #1f1f1f, #2c3e50);
-      color: white;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 3rem;
-      font-weight: bold;
-    }
-    .hero p {
-      font-size: 1.25rem;
-      margin-top: 1rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .btn-primary {
-      background-color: #f03e3e;
-      border: none;
-    }
-    .features {
-      padding: 4rem 1rem;
-      background-color: #f8f9fa;
-    }
-    .feature-icon {
-      font-size: 2rem;
-      color: #f03e3e;
-    }
-    footer {
-      padding: 2rem 1rem;
-      text-align: center;
-      background-color: #1f1f1f;
-      color: white;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Best - Discover Your Next Favorite</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0V4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Custom CSS for a sleek, modern look and Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e; /* Darker background for Bootstrap dark theme */
+            color: #e0e0e0; /* Light text for contrast - general body text */
+            line-height: 1.6;
+        }
+        /* Ensure all headings and paragraphs default to a light color for readability */
+        h1, h2, h3, h4, h5, h6, p {
+            color: #e0e0e0; /* Default light color for all text elements */
+        }
+        .navbar {
+            background-color: #0f0f1c !important; /* Even darker for navbar */
+            border-bottom: 1px solid #2a2a4a;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); /* Subtle gradient */
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            color: #ffffff; /* Ensure hero section text is white */
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(44, 62, 80, 0.4) 0%, transparent 70%);
+            animation: rotateBackground 20s linear infinite;
+            opacity: 0.3;
+        }
+        @keyframes rotateBackground {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .card {
+            background-color: #2a2a4a; /* Slightly lighter dark for cards */
+            border: 1px solid #4a4a6a;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-radius: 0.75rem; /* Rounded corners for cards */
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .btn-primary {
+            background-color: #007bff; /* Bootstrap primary blue */
+            border-color: #007bff;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px; /* Fully rounded */
+            font-weight: 600;
+            transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .icon-large {
+            font-size: 3rem; /* Larger icons */
+            color: #007bff;
+        }
+        footer {
+            background-color: #0f0f1c;
+            color: #b0b0b0;
+            border-top: 1px solid #2a2a4a;
+        }
+        /* Custom hover effect for footer links */
+        .hover-text-info:hover {
+            color: #17a2b8 !important; /* Bootstrap info color */
+        }
+        /* Ensure Bootstrap text color classes override default for specific elements */
+        .text-info {
+            color: #17a2b8 !important; /* Ensure Bootstrap info color is applied */
+        }
+        .text-white {
+            color: #ffffff !important; /* Ensure Bootstrap white color is applied */
+        }
+        .text-muted {
+            color: #b0b0b0 !important; /* Ensure Bootstrap muted color is applied and readable */
+        }
+        .bg-darker {
+            background-color: #111122 !important; /* Custom darker background */
+        }
+    </style>
 </head>
 <body>
+    <!-- Header/Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid container">
+                <a class="navbar-brand text-info fw-bold fs-4" href="landing_page.html">Next Best</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Discover</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-  <header class="hero">
-    <div class="container">
-      <h1>Next Best</h1>
-      <p>Your curatedlifestyle assistant for discovering the best movies, music, restaurants, and art — all tailored to your taste.</p>
-      <a href="index.html" class="btn btn-primary btn-lg mt-4">Start Exploring</a>
-    </div>
-  </header>
-
-  <section class="features">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md-4 mb-4">
-          <div class="feature-icon">🎯</div>
-          <h5 class="mt-2">Curated by Taste</h5>
-          <p>Get recommendations based on your mood, interests, and style.</p>
+    <!-- Hero Section -->
+    <section class="hero-section py-5 px-4">
+        <div class="container position-relative z-1">
+            <h1 class="display-3 fw-bold mb-4">
+                Discover Your <span class="text-info">Next Best</span> Experience
+            </h1>
+            <p class="lead mb-5 mx-auto" style="max-width: 700px;">
+                Uncover personalized recommendations across movies, music, books, and more. Your next favorite is just a click away.
+            </p>
+            <a href="index.html" class="btn btn-primary btn-lg">
+                Get Started <i class="fas fa-arrow-right ms-2"></i>
+            </a>
         </div>
-        <div class="col-md-4 mb-4">
-          <div class="feature-icon">🤖</div>
-          <h5 class="mt-2">Powered by AI</h5>
-          <p>Intelligent suggestions driven by Qloo’s cultural API engine.</p>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="feature-icon">⚡</div>
-          <h5 class="mt-2">Instant & Dynamic</h5>
-          <p>Tap “Next Best” and discover a whole new experience instantly.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <footer>
-    <div class="container">
-      <p class="mb-1">&copy; 2025 Next Best. Built with love and data.</p>
-      <small>Inspired by Fueled's aesthetic and Qloo's cultural graph.</small>
-    </div>
-  </footer>
+    <!-- Features Section -->
+    <section class="py-5 px-4 bg-dark">
+        <div class="container text-center">
+            <h2 class="display-4 fw-bold mb-5 text-info">What We Offer</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <!-- Feature 1: Personalized Recommendations -->
+                <div class="col">
+                    <div class="card p-4 h-100 d-flex flex-column align-items-center">
+                        <i class="fas fa-star icon-large mb-3"></i>
+                        <h3 class="h4 fw-semibold mb-3 text-white">Personalized Picks</h3>
+                        <p class="text-muted">
+                            Our AI learns your unique tastes to suggest content you'll genuinely love.
+                        </p>
+                    </div>
+                </div>
+                <!-- Feature 2: Wide Range of Categories -->
+                <div class="col">
+                    <div class="card p-4 h-100 d-flex flex-column align-items-center">
+                        <i class="fas fa-compass icon-large mb-3"></i>
+                        <h3 class="h4 fw-semibold mb-3 text-white">Explore Broad Horizons</h3>
+                        <p class="text-muted">
+                            From blockbuster movies to hidden indie gems, find recommendations across diverse categories.
+                        </p>
+                    </div>
+                </div>
+                <!-- Feature 3: Simple & Intuitive -->
+                <div class="col">
+                    <div class="card p-4 h-100 d-flex flex-column align-items-center">
+                        <i class="fas fa-magic icon-large mb-3"></i>
+                        <h3 class="h4 fw-semibold mb-3 text-white">Effortless Discovery</h3>
+                        <p class="text-muted">
+                            A seamless experience designed to make finding your "next best" easy and fun.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Call to Action Section -->
+    <section class="py-5 px-4 bg-darker text-center">
+        <div class="container">
+            <h2 class="display-4 fw-bold mb-4 text-white">Ready to Find Your Next Favorite?</h2>
+            <p class="lead text-muted mb-5 mx-auto" style="max-width: 700px;">
+                Join the community of explorers who are always one step ahead in discovering amazing content.
+            </p>
+            <a href="index.html" class="btn btn-primary btn-lg">
+                Start Discovering Now <i class="fas fa-play-circle ms-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 px-4 text-center">
+        <div class="container">
+            <p class="mb-2">&copy; 2024 Next Best. All rights reserved.</p>
+            <div class="d-flex justify-content-center space-x-3">
+                <a href="#" class="text-muted mx-2 hover-text-info"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" class="text-muted mx-2 hover-text-info"><i class="fab fa-facebook-f fa-lg"></i></a>
+                <a href="#" class="text-muted mx-2 hover-text-info"><i class="fab fa-instagram fa-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS CDN (Bundle with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
